@@ -1,0 +1,122 @@
+public class Process {
+    private int processId;
+    private int arrivalTime;
+    private int burstTime;
+    private int priority;
+    // Add other necessary attributes
+    
+    // Constructor
+    public Process(int processId, int arrivalTime, int burstTime, int priority) {
+        this.processId = processId;
+        this.arrivalTime = arrivalTime;
+        this.burstTime = burstTime;
+        this.priority = priority;
+    }
+    
+    // Getters and Setters
+    public int getProcessId() {
+        return processId;
+    }
+
+    public int getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public int getBurstTime() {
+        return burstTime;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+}
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class FCFS {
+    public static void schedule(Process[] processes) {
+        Arrays.sort(processes, Comparator.comparing(Process::getArrivalTime));
+        
+        for (Process process : processes) {
+            System.out.println("Executing process " + process.getProcessId());
+            // Execute process for its burst time
+            // Update waiting time, turnaround time, etc.
+        }
+    }
+}
+
+public class SJF {
+    public static void schedule(Process[] processes) {
+        Arrays.sort(processes, Comparator.comparing(Process::getBurstTime));
+        
+        for (Process process : processes) {
+            System.out.println("Executing process " + process.getProcessId());
+            // Execute process for its burst time
+            // Update waiting time, turnaround time, etc.
+        }
+    }
+}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class GUI extends JFrame {
+    private JComboBox<String> algorithmComboBox;
+    private JButton startButton;
+    
+    public GUI() {
+        setTitle("CPU Scheduling Simulator");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 200);
+        setLayout(new GridLayout(3, 1));
+        
+        JLabel titleLabel = new JLabel("Select CPU Scheduling Algorithm:");
+        algorithmComboBox = new JComboBox<>(new String[]{"FCFS", "SJF"});
+        startButton = new JButton("Start Simulation");
+        
+        add(titleLabel);
+        add(algorithmComboBox);
+        add(startButton);
+        
+        setVisible(true);
+    }
+    
+    public String getSelectedAlgorithm() {
+        return (String) algorithmComboBox.getSelectedItem();
+    }
+
+    public void addStartButtonListener(ActionListener listener) {
+        startButton.addActionListener(listener);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        GUI gui = new GUI();
+
+        gui.addStartButtonListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedAlgorithm = gui.getSelectedAlgorithm();
+                startSimulation(selectedAlgorithm);
+            }
+        });
+    }
+    
+    public static void startSimulation(String selectedAlgorithm) {
+        Process[] processes = {
+            new Process(1, 0, 4, 1),
+            new Process(2, 2, 3, 2),
+            new Process(3, 3, 5, 3)
+        };
+        
+        switch (selectedAlgorithm) {
+            case "FCFS":
+                FCFS.schedule(processes);
+                break;
+            case "SJF":
+                SJF.schedule(processes);
+                break;
+        }
+    }
+}
